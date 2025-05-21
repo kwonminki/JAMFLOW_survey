@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="description"
+              content="Harnessing Text-to-Image Models for Text-to-Video Generation">
+        <meta name="keywords" content="text-to-video">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Harnessing Text-to-Image Models for Text-to-Video Generation</title>
+      
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+      
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+      
+          gtag('js', new Date());
+      
+          gtag('config', 'G-PYVRSFMDRL');
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var sections = document.querySelectorAll('section');
+
+                sections.forEach(function(section, sectionIndex) {
+                    var questionGroups = section.querySelectorAll('.question');
+
+                    questionGroups.forEach(function(group, groupIndex) {
+                        var radioButtons = group.querySelectorAll('input[type="radio"]');
+
+                        radioButtons.forEach(function(radio, idx) {
+                            var baseName = radio.getAttribute('name');
+                            var newName = baseName + '-section' + sectionIndex + '-group' + groupIndex;
+                            var newId = newName + '-option' + idx;
+
+                            // 먼저 새로운 ID와 name을 계산
+                            // 다음으로, 연결된 라벨의 for 속성을 업데이트
+                            var label = group.querySelector('label[for="' + radio.id + '"]');
+                            if (label) {
+                                label.setAttribute('for', newId);
+                            }
+
+                            // 마지막으로 라디오 버튼의 id와 name을 업데이트
+                            radio.setAttribute('id', newId);
+                            radio.setAttribute('name', newName);
+                        });
+                    });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // 모든 <section> 태그를 선택
+                var sections = document.querySelectorAll('section');
+
+                // 각 <section> 태그에 대해 순회
+                sections.forEach(function (section, index) {
+                    // <h2> 태그를 찾음
+                    var subtitle = section.querySelector('.subtitle');
+
+                    // <h2> 태그가 존재하면 내용에 번호를 추가
+                    if (subtitle) {
+                        subtitle.textContent = (index) + '. ' + subtitle.textContent;
+                    }
+                });
+            });
+        </script>
+      
+        <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+              rel="stylesheet">
+      
+        <link rel="stylesheet" href="./css/bulma.min.css">
+        <link rel="stylesheet" href="./css/bulma-carousel.min.css">
+        <link rel="stylesheet" href="./css/bulma-slider.min.css">
+        <link rel="stylesheet" href="./css/fontawesome.all.min.css">
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+        <link rel="stylesheet" href="./css/index.css">
+      
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- <script defer src="./js/fontawesome.all.min.js"></script> -->
+        <!-- <script src="./js/bulma-carousel.min.js"></script> -->
+        <!-- <script src="./js/bulma-slider.min.js"></script> -->
+        <script src="./js/index.js"></script>
+      </head>
+<body>
+
+    <section class="hero">
+        <div class="hero-body">
+          <div class="container is-max-desktop">
+            <div class="columns is-centered">
+              <div class="column has-text-centered">
+                <h1 class="title is-1 publication-title">Survey</h1>
+
+                <div class="is-size-5 publication-authors">
+                  <span class="author-block">참여해 주셔서 감사합니다!&nbsp; </span>
+      
+                </div>
+      
+                <!-- <h1 style="font-size:24px;font-weight:bold">Thank you!</h1> -->
+                
+                <div class="column has-text-centered">
+                  <div class="publication-links">
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <br>
+      <div class="columns is-centered has-text-centered">
+        <h3 class="title is-4"> 본 컨텐츠는 데스크탑 화면과 크롬 브라우저에 최적화되어 있습니다. <br>모바일 기기나 다른 웹 브라우저에서는 적합하지 않을 수 있습니다.</h3>
+      </div>
+      <br>
+
+      <br><br><br>
+
+    <br>
+    <div class="columns is-centered has-text-centered"> 
+        <h4 class="title is-5"> 주어진 오디오에 맞게 생성된 영상입니다.</h4>
+    </div>
+    <div class="columns is-centered has-text-centered"> 
+        <h4 class="title is-5">오디오와 잘 맞는지, 영상은 자연스러운지를 기준으로 순위를 매겨주세요.</h4>
+    </div>
+    <div class="columns is-centered has-text-centered"> 
+        <h4 class="title is-5">(총 5개 문항)</h4>
+    </div>
+
+    <br><br><br>
+      
+    
+    <section>
+
+      <div class="container">
+        <div class="columns is-centered has-text-centered"> 
+        <h4 class="title is-4 mb-4">1번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+        </div>
+        <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio1_000_aniportrait.mp4" /> 
+            </video>
+            <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/ours_lipsync/RD_Radio1_000_0.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio1_000_hallo.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/ours_lipsync/RD_Radio1_000_0_i2v.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio1_000_hallo3.mp4" /> 
+              </video>
+              <figcaption>5번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio1_000_sadtalker.mp4" /> 
+              </video>
+              <figcaption>6번 영상</figcaption>
+          </figure>
+        </div>
+        <div class="box" style="padding: 1rem 1.25rem;">
+            <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+        <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+            <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+        <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+            <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+        <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+            <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+        <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+            <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+        <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+            <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+        <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+            <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+            <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+            <label for="motion1">1번 영상</label>
+            <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+            <label for="motion2">2번 영상</label>
+            <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+            <label for="motion3">3번 영상</label>
+            <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+            <label for="motion4">4번 영상</label>
+            <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+            <label for="motion5">5번 영상</label>
+            <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+            <label for="motion6">6번 영상</label>
+        </div>
+      
+      </section>
+
+      <br><br><br>
+      <section>
+
+        <div class="container">
+          <div class="columns is-centered has-text-centered"> 
+          <h4 class="title is-4 mb-4">2번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+          </div>
+          <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio4_000_aniportrait.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+            </figure>
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                    <source type="video/mp4" src="video/ours_lipsync/RD_Radio4_000_0.mp4" /> 
+                </video>
+                <figcaption>2번 영상</figcaption>
+            </figure>
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                    <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio4_000_hallo.mp4" /> 
+                </video>
+                <figcaption>3번 영상</figcaption>
+            </figure>
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                    <source type="video/mp4" src="video/ours_lipsync/RD_Radio4_000_0_i2v.mp4" /> 
+                </video>
+                <figcaption>4번 영상</figcaption>
+            </figure>
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                    <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio4_000_hallo3.mp4" /> 
+                </video>
+                <figcaption>5번 영상</figcaption>
+            </figure>
+            <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                    <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio4_000_sadtalker.mp4" /> 
+                </video>
+                <figcaption>6번 영상</figcaption>
+            </figure>
+          </div>
+          <div class="box" style="padding: 1rem 1.25rem;">
+              <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+          <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+              <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+          <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+              <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+          <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+              <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+          <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+              <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+          <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+              <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+          <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+              <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+              <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+              <label for="motion1">1번 영상</label>
+              <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+              <label for="motion2">2번 영상</label>
+              <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+              <label for="motion3">3번 영상</label>
+              <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+              <label for="motion4">4번 영상</label>
+              <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+              <label for="motion5">5번 영상</label>
+              <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+              <label for="motion6">6번 영상</label>
+          </div>
+        
+        </section>
+
+        <br><br><br>
+        <section>
+  
+          <div class="container">
+            <div class="columns is-centered has-text-centered"> 
+            <h4 class="title is-4 mb-4">3번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+            </div>
+            <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio5_000_aniportrait.mp4" /> 
+                </video>
+                <figcaption>1번 영상</figcaption>
+              </figure>
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                  <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                      <source type="video/mp4" src="video/ours_lipsync/RD_Radio5_000_0.mp4" /> 
+                  </video>
+                  <figcaption>2번 영상</figcaption>
+              </figure>
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                  <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                      <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio5_000_hallo.mp4" /> 
+                  </video>
+                  <figcaption>3번 영상</figcaption>
+              </figure>
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                  <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                      <source type="video/mp4" src="video/ours_lipsync/RD_Radio5_000_0_i2v.mp4" /> 
+                  </video>
+                  <figcaption>4번 영상</figcaption>
+              </figure>
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                  <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                      <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio5_000_hallo3.mp4" /> 
+                  </video>
+                  <figcaption>5번 영상</figcaption>
+              </figure>
+              <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+                  <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                      <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio5_000_sadtalker.mp4" /> 
+                  </video>
+                  <figcaption>6번 영상</figcaption>
+              </figure>
+            </div>
+            <div class="box" style="padding: 1rem 1.25rem;">
+                <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+            <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+                <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+            <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+                <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+            <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+                <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+            <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+                <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+            <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+                <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+            <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+                <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+                <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+                <label for="motion1">1번 영상</label>
+                <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+                <label for="motion2">2번 영상</label>
+                <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+                <label for="motion3">3번 영상</label>
+                <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+                <label for="motion4">4번 영상</label>
+                <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+                <label for="motion5">5번 영상</label>
+                <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+                <label for="motion6">6번 영상</label>
+            </div>
+          
+          </section>
+
+  <!-- ============================= -->
+  <br><br><br>
+  <section>
+
+    <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">3번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+          <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+            <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio7_000_aniportrait.mp4" /> 
+          </video>
+          <figcaption>1번 영상</figcaption>
+        </figure>
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/ours_lipsync/RD_Radio7_000_0.mp4" /> 
+            </video>
+            <figcaption>2번 영상</figcaption>
+        </figure>
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio7_000_hallo.mp4" /> 
+            </video>
+            <figcaption>3번 영상</figcaption>
+        </figure>
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/ours_lipsync/RD_Radio7_000_0_i2v.mp4" /> 
+            </video>
+            <figcaption>4번 영상</figcaption>
+        </figure>
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio7_000_hallo3.mp4" /> 
+            </video>
+            <figcaption>5번 영상</figcaption>
+        </figure>
+        <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio7_000_sadtalker.mp4" /> 
+            </video>
+            <figcaption>6번 영상</figcaption>
+        </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+      <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+          <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+      <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+          <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+      <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+          <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+      <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+          <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+          <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+          <label for="motion4">4번 영상</label>
+          <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+          <label for="motion5">5번 영상</label>
+          <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+          <label for="motion6">6번 영상</label>
+      </div>
+    
+    </section>
+
+
+   <!-- ============================= -->
+
+   <br><br><br>
+   <section>
+
+     <div class="container">
+       <div class="columns is-centered has-text-centered"> 
+       <h4 class="title is-4 mb-4">4번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+       </div>
+       <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+           <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+             <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio9_000_aniportrait.mp4" /> 
+           </video>
+           <figcaption>1번 영상</figcaption>
+         </figure>
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                 <source type="video/mp4" src="video/ours_lipsync/RD_Radio9_000_0.mp4" /> 
+             </video>
+             <figcaption>2번 영상</figcaption>
+         </figure>
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                 <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio9_000_hallo.mp4" /> 
+             </video>
+             <figcaption>3번 영상</figcaption>
+         </figure>
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                 <source type="video/mp4" src="video/ours_lipsync/RD_Radio9_000_0_i2v.mp4" /> 
+             </video>
+             <figcaption>4번 영상</figcaption>
+         </figure>
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                 <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio9_000_hallo3.mp4" /> 
+             </video>
+             <figcaption>5번 영상</figcaption>
+         </figure>
+         <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                 <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio9_000_sadtalker.mp4" /> 
+             </video>
+             <figcaption>6번 영상</figcaption>
+         </figure>
+       </div>
+       <div class="box" style="padding: 1rem 1.25rem;">
+           <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+       <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+           <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+       <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+           <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+       <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+           <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+       <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+           <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+       <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+           <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+       <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+           <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+           <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+           <label for="motion1">1번 영상</label>
+           <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+           <label for="motion2">2번 영상</label>
+           <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+           <label for="motion3">3번 영상</label>
+           <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+           <label for="motion4">4번 영상</label>
+           <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+           <label for="motion5">5번 영상</label>
+           <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+           <label for="motion6">6번 영상</label>
+       </div>
+     
+     </section>
+
+     <br><br><br>
+     <section>
+
+       <div class="container">
+         <div class="columns is-centered has-text-centered"> 
+         <h4 class="title is-4 mb-4">5번. 아래 영상들을 보고 순위를 매겨주세요</h4>
+         </div>
+         <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+             <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+               <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio11_000_aniportrait.mp4" /> 
+             </video>
+             <figcaption>1번 영상</figcaption>
+           </figure>
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+               <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                   <source type="video/mp4" src="video/ours_lipsync/RD_Radio11_000_0.mp4" /> 
+               </video>
+               <figcaption>2번 영상</figcaption>
+           </figure>
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+               <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                   <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio11_000_hallo.mp4" /> 
+               </video>
+               <figcaption>3번 영상</figcaption>
+           </figure>
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+               <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                   <source type="video/mp4" src="video/ours_lipsync/RD_Radio11_000_0_i2v.mp4" /> 
+               </video>
+               <figcaption>4번 영상</figcaption>
+           </figure>
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+               <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                   <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio11_000_hallo3.mp4" /> 
+               </video>
+               <figcaption>5번 영상</figcaption>
+           </figure>
+           <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+               <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                   <source type="video/mp4" src="video/jamflow_hdtf_userstudy/selected/RD_Radio11_000_sadtalker.mp4" /> 
+               </video>
+               <figcaption>6번 영상</figcaption>
+           </figure>
+         </div>
+         <div class="box" style="padding: 1rem 1.25rem;">
+             <p><b>1위~6위</b>를 각각 골라주세요. (각 순위는 서로 다른 영상이어야 합니다.)</p>
+         <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+             <p class="question1"><b>1위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank1" name="motion_rank1" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank1" name="motion_rank1" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+         <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+             <p class="question2"><b>2위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank2" name="motion_rank2" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank2" name="motion_rank2" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank2" name="motion_rank2" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank2" name="motion_rank2" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank2" name="motion_rank2" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank2" name="motion_rank2" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+         <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+             <p class="question3"><b>3위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank3" name="motion_rank3" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank3" name="motion_rank3" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank3" name="motion_rank3" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank3" name="motion_rank3" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank3" name="motion_rank3" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank3" name="motion_rank3" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+         <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+             <p class="question4"><b>4위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank4" name="motion_rank4" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank4" name="motion_rank4" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank4" name="motion_rank4" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank4" name="motion_rank4" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank4" name="motion_rank4" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank4" name="motion_rank4" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+         <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+             <p class="question5"><b>5위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank5" name="motion_rank5" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank5" name="motion_rank5" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank5" name="motion_rank5" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank5" name="motion_rank5" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank5" name="motion_rank5" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank5" name="motion_rank5" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+         <div class="question" style="padding: 0.3em 1.25rem; margin:  0;">
+             <p class="question6"><b>6위</b>를 골라주세요. <br></p>
+             <input type="radio" id="motion1_rank6" name="motion_rank6" value="1">
+             <label for="motion1">1번 영상</label>
+             <input type="radio" id="motion2_rank6" name="motion_rank6" value="2">
+             <label for="motion2">2번 영상</label>
+             <input type="radio" id="motion3_rank6" name="motion_rank6" value="3">
+             <label for="motion3">3번 영상</label>
+             <input type="radio" id="motion4_rank6" name="motion_rank6" value="4">
+             <label for="motion4">4번 영상</label>
+             <input type="radio" id="motion5_rank6" name="motion_rank6" value="5">
+             <label for="motion5">5번 영상</label>
+             <input type="radio" id="motion6_rank6" name="motion_rank6" value="6">
+             <label for="motion6">6번 영상</label>
+         </div>
+       
+       </section>
+
+  <!-- ============================= -->
+
+  <br>
+  <br>  <br>  <br>  <br>  <br>
+  <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-5"> 주어진 텍스트와 비디오에 맞게 생성된 오디오입니다.</h4>
+  </div>
+  <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-5">생성된 오디오가 텍스트랑 비디오와 잘 맞는지, 오디오는 자연스러운지, 목소리는 원래 비디오와 비슷한지 기준으로</h4>
+  </div>
+  <div class="columns is-centered has-text-centered"> 
+    <h4 class="title is-5">가장 좋은 결과를 골라주세요.</h4>
+</div>
+  <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-5">(총 15개 문항)</h4>
+  </div>
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">1번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              it is finding your own voice where your own voice sits naturally and stably and healthily
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row1/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row1/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row1/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row1/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row1/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">2번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            you want that alien broad take her
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row2/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row2/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row2/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row2/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row2/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">3번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            squarespace makes it incredibly simple to create beautiful websites with their all in one platform
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row3/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row3/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row3/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row3/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row3/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">4번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            we do not need a european court
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row4/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row4/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row4/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row4/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row4/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">5번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            and any time i am passing it i stop and watch it too
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row5/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row5/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row5/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row5/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row5/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">6번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            now before you add those in if you want to have a little bit of a thicker soup what you will do
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row6/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row6/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row6/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row6/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row6/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">7번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            if you saw my video about the custom christian clings with a salmon dial you might remember that we spoke about mark cho the co founder of the armory co owner of drakes
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row7/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row7/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row7/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row7/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row7/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">8번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            for more videos on rpgs though just
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row8/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row8/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row8/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row8/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row8/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">9번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            he forgot me at the coffee shop when all i wanted to do was go and talk to him
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row9/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row9/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row9/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row9/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row9/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">10번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            and i am not sacrificing what
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row10/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row10/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row10/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row10/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row10/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">11번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            low prices can also give you a chance to practice your skills on people who do not expect huge outcomes or results because they know they are getting a deal
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row11/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row11/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row11/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row11/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row11/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">12번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            this older sister that she looks up to and that she sees as so successful and beautiful
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row12/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row12/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row12/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row12/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row12/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">13번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            but you still have a chance to make things right because i am here
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row13/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row13/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row13/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row13/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row13/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">14번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            i know what is on the other side
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row14/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row14/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row14/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row14/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row14/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+  
+
+
+  <br><br><br>
+  <section>
+
+      <div class="container">
+      <div class="columns is-centered has-text-centered"> 
+      <h4 class="title is-4 mb-4">15번. 아래 영상들을 보고 가장 자연스럽고 원본 목소리와 비슷한 오디오를 골라주세요.</h4>
+      </div>
+      <div id="wrapper" style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; text-align: center; gap: 20px; width: 60%; margin: auto;"> 
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+            i did it because i was foolish
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row15/1_gt.mp4" /> 
+              </video>
+              <figcaption>input GT 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row15/3_hpm.mp4" /> 
+              </video>
+              <figcaption>1번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row15/4_style.mp4" /> 
+              </video>
+              <figcaption>2번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row15/ours_.mp4" /> 
+              </video>
+              <figcaption>3번 영상</figcaption>
+          </figure>
+          <figure style="flex-basis: calc(30%); max-width: calc(30%);">
+              <video controls playsinline style="width: 100%; height: auto; object-fit: contain;"> 
+                  <source type="video/mp4" src="video/automated_dub/row15/2_ours.mp4" /> 
+              </video>
+              <figcaption>4번 영상</figcaption>
+          </figure>
+      </div>
+      <div class="box" style="padding: 1rem 1.25rem;">
+          <p><b>가장 자연스럽고 원본 목소리와 비슷한 오디오를 가진 </b>영상을 하나 골라주세요.</p>
+      <div class="question" style="padding: 0.3em 1.25rem; margin: 0;">
+          <input type="radio" id="motion1_rank1" name="motion_rank1" value="1">
+          <label for="motion1">1번 영상</label>
+          <input type="radio" id="motion2_rank1" name="motion_rank1" value="2">
+          <label for="motion2">2번 영상</label>
+          <input type="radio" id="motion3_rank1" name="motion_rank1" value="3">
+          <label for="motion3">3번 영상</label>
+          <input type="radio" id="motion4_rank1" name="motion_rank1" value="4">
+          <label for="motion4">4번 영상</label>
+      </div>
+      </section>
+
+
+      <br><br><br>
+      <div class="columns is-centered has-text-centered">
+        
+    <!-- 버튼 추가 -->
+        <button id="submitBtn">최종제출(Submit) - 클릭 후 조금만 기다려주세요. Please wait for a while after click</button>
+    </div>
+    <br><br><br><br><br><br>
+
+
+<script>
+    function getFinalResponse() {
+        var submitButton = document.getElementById("submitBtn"); // 버튼 요소를 가져옵니다
+        var questions = document.querySelectorAll('.question');
+        var responses = [];
+        var allAnswered = true;
+
+        for (var i = 0; i < questions.length; i++) {
+            var checkedRadio = questions[i].querySelector('input[type="radio"]:checked');
+            
+            if (checkedRadio) {
+                responses.push(checkedRadio.value);
+            } else {
+                allAnswered = false;
+                alert("질문 " + (Math.floor(i / 6) + 1) + "에 답해야 합니다. \n 질문 " + (Math.floor(i / 6) + 1) + "에 채우지 않은 선택지가 있습니다.");
+                break;
+            }
+        }
+
+        if (allAnswered) {
+            var finalResponse = responses.join("-");
+            console.log(finalResponse); // 최종 응답 확인
+            submitButton.disabled = true; // 버튼을 비활성화합니다
+            submitButton.innerText = "처리 중..."; // 버튼 텍스트를 변경합니다
+
+            window.location.href = "https://script.google.com/macros/s/AKfycbydHyrZ6CorxG70VDkdpDlXAOL6zcNtHZc433ntZP59Zclh1qv9m9k5IIxVmOuzugvecQ/exec?response=" + finalResponse;
+            return finalResponse; // 여기서 finalResponse를 다른 곳에 사용할 수 있습니다.
+        } else {
+            return null; // 모든 질문에 답하지 않았다면 null 반환
+        }
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", function() {
+        getFinalResponse();
+    });
+</script>
+
+
+</body>
+</html>
